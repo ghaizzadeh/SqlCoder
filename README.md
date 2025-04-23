@@ -1,20 +1,58 @@
-این یک مثال ساده از استفاده از مدل sqlCoder جهت تبدیل زبان طبیعی به کد sql است 
-جهت استفاده از sqlcoder llm باید ابتدا به سایت https://ollama.com رفته و ollama  رو دانلود کنیم ، بعد از نصب رو ویندوز میتونیم با تایپ دستور 
-ollama --version
-از ران بودنش مطوئن بشیم 
-حالا باید مدل مد نظرمون رو با دستور 
-ollama pull sqlcoder 
-ابتدار دانلود و سپس با دستور 
-ollam run sqlcoder
-اجرا کنیم ، بعد از اجرا باید بدونیم که ollama یک api  داره که روی 
+# Text-to-SQL with sqlCoder & ASP.NET Core
+
+این یک مثال ساده از استفاده از مدل **sqlCoder** جهت تبدیل زبان طبیعی به کد SQL است.
+
+##  مراحل استفاده از مدل sqlCoder
+برای استفاده از مدل `sqlCoder` به کمک LLMهای محلی:
+<div dir="rtl">
+1. به سایت [https://ollama.com](https://ollama.com) بروید و **Ollama** را برای سیستم خود (مثلاً ویندوز) دانلود و نصب کنید.
+  <br>
+2. برای اطمینان از نصب موفق، دستور زیر را اجرا کنید:
+</div>
+   
+
+   ```bash
+   ollama --version
+   ```
+<div dir="rtl">
+   
+4. سپس مدل مورد نظر را دانلود کرده و اجرا کنید:
+ </div>
+ 
+   ```bash
+   ollama pull sqlcoder
+   ollama run sqlcoder
+   ```
+
+   <div dir="rtl">
+
+5. پس از اجرا، سرویس Ollama یک API فراهم می‌کند که روی آدرس زیر گوش می‌دهد:
+   </div>
+
+
+```bash
 POST http://localhost:11434/api/generate
-بهش گوش میده 
-من یک asp.net core web api  ساده نوشتم که یک کلاس داره با عنوان ollamaService در پوشه service  , d و یک کنترلر با عنوان TextTosql که استفاده ازش هم خیلی ساده س کافیه سولوشن رو ران کنیم و با استفاده از swagger  یا paostman این جی سان رو براش بفرستیم به صورت مثال 
+```
+
+## درباره پروژه
+در این پروژه، یک ASP.NET Core Web API ساده نوشته شده که شامل:
+1. کلاسی با عنوان OllamaService در پوشه Services
+2. کنترلری با عنوان TextToSqlController
+
+## نحوه استفاده
+پس از اجرای پروژه (با Visual Studio یا dotnet run)، می‌توانید از طریق Swagger یا Postman، درخواست زیر را به متد POST کنترلر TextToSql ارسال کنید:
+###  درخواست نمونه 
+```json
 {
-  "prompt": " I have a table in sqlServer database named tbl_patients with the columns pat_id, first_name, last_name, recep_date that stores a list of patients admitted to the hospital. I want to have an sql query that returns the list of 10 patients who have been recently admitted. Return only the SQL code. "
+  "prompt": "I have a table in sqlServer database named tbl_patients with the columns pat_id, first_name, last_name, recep_date that stores a list of patients admitted to the hospital. I want to have an sql query that returns the list of 10 patients who have been recently admitted. Return only the SQL code."
 }
-جی سان بالا رو به اکشن post موجود در textTosql controller میفرستم و این دیتا رو ازش تحویل میگیرم 
+```
+### پاسخ نمونه 
+```json
 {
-  "sql": " Select top 10 pat_id, first_name, last_name FROM tbl_patients WHERE recep_date >= GETDATE() order by recep_date desc;"
+  "sql": "SELECT TOP 10 pat_id, first_name, last_name FROM tbl_patients WHERE recep_date >= GETDATE() ORDER BY recep_date DESC;"
 }
-این مهمه که پرامپت رو با دقت و جزییات براش بفرستیم
+```
+**نکته مهم**
+دقت در نوشتن prompt بسیار اهمیت دارد؛ حتماً به زبان انگلیسی و با جزئیات دقیق نیاز خود را بیان کنید تا مدل بهترین نتیجه را تولید کند.
+
